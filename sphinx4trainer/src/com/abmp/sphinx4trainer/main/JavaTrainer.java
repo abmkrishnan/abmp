@@ -3,8 +3,10 @@
  */
 package com.abmp.sphinx4trainer.main;
 
+import java.io.BufferedReader;
 import java.io.File;
-import java.io.IOException;
+import java.io.FileReader;
+import java.util.Scanner;
 import javax.sound.sampled.AudioFileFormat;
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioSystem;
@@ -34,13 +36,59 @@ public class JavaTrainer
 
 	public void train()
 	{
-		String strFilename = "data/sample.wav";
+		try
+		{
+			int seq = 0;
+			BufferedReader bufferedReader = new BufferedReader(new FileReader(new File("data/sentences_list.txt")));
+			String sentece = null;
+			while (null != (sentece = bufferedReader.readLine()))
+			{
+				String ser = "";
+				if(seq < 10)
+				{
+					ser = "0000" + (++seq);
+				}
+				else if(seq < 100)
+				{
+					ser = "000" + (++seq);
+				}
+				else if(seq < 1000)
+				{
+					ser = "00" + (++seq);
+				}
+				else if(seq < 10000)
+				{
+					ser = "0" + (++seq);
+				}
+				else
+				{
+					ser = "" + (++seq);
+				}
+				System.out.println(ser + ": " + sentece);
+				System.out.println("Press ENTER to start the recording.");
+				Scanner s = new Scanner(System.in);
+				s.nextLine();
+				recordWav("set_1", ser);
+			}
+			bufferedReader.close();
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
+
+	public void recordWav(String dir, String ser)
+	{
+		String strFilename = "data/sets/" + dir + "/" + ser + ".wav";
 		File outputFile = new File(strFilename);
 		/* For simplicity, the audio data format used for recording
 		   is hardcoded here. We use PCM 44.1 kHz, 16 bit signed,
 		   stereo.
 		*/
-		AudioFormat audioFormat = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED, 44100.0F, 16, 2, 4, 44100.0F, false);
+		int channels = 1; // default 2
+		float sampleRate = 16000.0F; // default 44100.0F
+		AudioFormat audioFormat = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED, sampleRate, 16, channels, channels * 2, sampleRate, false);
 		/* Now, we are trying to get a TargetDataLine. The
 		   TargetDataLine is used later to read audio data from it.
 		   If requesting the line was successful, we are opening
@@ -70,16 +118,16 @@ public class JavaTrainer
 		*/
 		SimpleAudioRecorder recorder = new SimpleAudioRecorder(targetDataLine, targetType, outputFile);
 		recorder.start();
-		System.out.println("Recording...");
 		/* And now, we are waiting again for the user to press ENTER,
 		   this time to signal that the recording should be stopped.
 		*/
 		System.out.println("Press ENTER to stop the recording.");
 		try
 		{
-			System.in.read();
+			Scanner s = new Scanner(System.in);
+			s.nextLine();
 		}
-		catch (IOException e)
+		catch (Exception e)
 		{
 			e.printStackTrace();
 		}
