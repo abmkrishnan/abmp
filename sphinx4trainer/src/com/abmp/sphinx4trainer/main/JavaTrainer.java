@@ -4,8 +4,10 @@
 package com.abmp.sphinx4trainer.main;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.util.Scanner;
 import javax.sound.sampled.AudioFileFormat;
 import javax.sound.sampled.AudioFormat;
@@ -38,8 +40,11 @@ public class JavaTrainer
 	{
 		try
 		{
+			String setNo = "set_1";
 			int seq = 0;
 			BufferedReader bufferedReader = new BufferedReader(new FileReader(new File("data/sentences_list.txt")));
+			BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(new File("data/sets/" + setNo + "/fileids.txt")));
+			BufferedWriter bufferedWriter2 = new BufferedWriter(new FileWriter(new File("data/sets/" + setNo + "/transcription.txt")));
 			String sentece = null;
 			while (null != (sentece = bufferedReader.readLine()))
 			{
@@ -68,9 +73,15 @@ public class JavaTrainer
 				System.out.println("Press ENTER to start the recording.");
 				Scanner s = new Scanner(System.in);
 				s.nextLine();
-				recordWav("set_1", ser);
+				recordWav(setNo, ser);
+				bufferedWriter.append(ser).append("\n");
+				bufferedWriter2.append("<S> " + sentece + " </S> (" + ser + ")").append("\n");
 			}
 			bufferedReader.close();
+			bufferedWriter.flush();
+			bufferedWriter.close();
+			bufferedWriter2.flush();
+			bufferedWriter2.close();
 		}
 		catch (Exception e)
 		{
