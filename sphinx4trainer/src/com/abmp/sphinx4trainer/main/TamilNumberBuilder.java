@@ -30,6 +30,7 @@ public class TamilNumberBuilder
 	{
 		List<String> listA = new ArrayList<String>();
 		List<String> listB = new ArrayList<String>();
+		List<String> listC = new ArrayList<String>();
 		BufferedReader bufferedReaderA = new BufferedReader(new FileReader(new File("data/lm/lm_1/tamil_numbers_a.txt")));
 		String readLineA = null;
 		while (null != (readLineA = bufferedReaderA.readLine()))
@@ -44,8 +45,17 @@ public class TamilNumberBuilder
 			listB.add(readLineB);
 		}
 		bufferedReaderB.close();
+		BufferedReader bufferedReaderC = new BufferedReader(new FileReader(new File("data/lm/lm_1/tamil_round_numbers.txt")));
+		String readLineC = null;
+		while (null != (readLineC = bufferedReaderC.readLine()))
+		{
+			listC.add(readLineC);
+		}
+		bufferedReaderC.close();
+		int i = -1;
 		for (String a : listA)
 		{
+			System.out.println(listC.get(++i));
 			for (String b : listB)
 			{
 				System.out.println(a + " " + b);
