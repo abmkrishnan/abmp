@@ -4,8 +4,10 @@
 package com.abmp.sphinx4trainer.main;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,14 +54,19 @@ public class TamilNumberBuilder
 			listC.add(readLineC);
 		}
 		bufferedReaderC.close();
+		BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(new File("data/lm/lm_1/tamil_temp_numbers.txt")));
 		int i = -1;
 		for (String a : listA)
 		{
-			System.out.println(listC.get(++i));
+			bufferedWriter.append(listC.get(++i)).append("\r\n");
+			System.out.println(listC.get(i));
 			for (String b : listB)
 			{
 				System.out.println(a + " " + b);
+				bufferedWriter.append(a + " " + b).append("\r\n");
 			}
 		}
+		bufferedWriter.flush();
+		bufferedWriter.close();
 	}
 }
