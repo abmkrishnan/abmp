@@ -40,28 +40,28 @@ public class JavaTrainer
 	{
 		try
 		{
-			String setNo = "set_1";
+			String setNo = "am_2";
 			int seq = 0;
-			BufferedReader bufferedReader = new BufferedReader(new FileReader(new File("data/sentences_list.txt")));
-			BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(new File("data/sets/" + setNo + "/fileids.txt")));
-			BufferedWriter bufferedWriter2 = new BufferedWriter(new FileWriter(new File("data/sets/" + setNo + "/transcription.txt")));
+			BufferedReader bufferedReader = new BufferedReader(new FileReader(new File("data/am/lm_am_1.txt")));
+			BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(new File("data/am/" + setNo + "/fileids.txt")));
+			BufferedWriter bufferedWriter2 = new BufferedWriter(new FileWriter(new File("data/am/" + setNo + "/transcription.txt")));
 			String sentece = null;
 			while (null != (sentece = bufferedReader.readLine()))
 			{
 				String ser = "";
-				if(seq < 10)
+				if(seq < 9)
 				{
 					ser = "0000" + (++seq);
 				}
-				else if(seq < 100)
+				else if(seq <= 100)
 				{
 					ser = "000" + (++seq);
 				}
-				else if(seq < 1000)
+				else if(seq <= 1000)
 				{
 					ser = "00" + (++seq);
 				}
-				else if(seq < 10000)
+				else if(seq <= 10000)
 				{
 					ser = "0" + (++seq);
 				}
@@ -75,7 +75,7 @@ public class JavaTrainer
 				s.nextLine();
 				recordWav(setNo, ser);
 				bufferedWriter.append(ser).append("\n");
-				bufferedWriter2.append("<S> " + sentece + " </S> (" + ser + ")").append("\n");
+				bufferedWriter2.append("<s> " + sentece + " </s> (" + ser + ")").append("\n");
 			}
 			bufferedReader.close();
 			bufferedWriter.flush();
@@ -91,7 +91,7 @@ public class JavaTrainer
 
 	public void recordWav(String dir, String ser)
 	{
-		String strFilename = "data/sets/" + dir + "/" + ser + ".wav";
+		String strFilename = "data/am/" + dir + "/" + ser + ".wav";
 		File outputFile = new File(strFilename);
 		/* For simplicity, the audio data format used for recording
 		   is hardcoded here. We use PCM 44.1 kHz, 16 bit signed,
@@ -145,6 +145,6 @@ public class JavaTrainer
 		/* Here, the recording is actually stopped.
 		 */
 		recorder.stopRecording();
-		System.out.println("Recording stopped.");
+//		System.out.println("Recording stopped.");
 	}
 }
